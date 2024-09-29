@@ -1,16 +1,39 @@
 # tokokita
 
-A new Flutter project.
+Tugas Pertemuan 4 Praktikum Pemrograman Mobile Shift C
 
-## Getting Started
+Nama : Daniel Abdillah Arif NIM : H1D022055
 
-This project is a starting point for a Flutter application.
+## Screenshot Tampilan UI
 
-A few resources to get you started if this is your first Flutter project:
+- Halaman Registrasi
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![](Screenshot(167).png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Halaman Login
+
+![](Screenshot(166).png)
+
+- Halaman List Produk
+
+![](Screenshot(168).png)
+
+- Halaman Tambah Produk
+
+![](Screenshot(169).png)
+
+- Halaman Detail Produk
+
+![](Screenshot(170).png)
+
+- Halaman Ubah Produk
+
+![](Screenshot(171).png)
+
+- Konfirmasi Hapus Produk
+
+![](Screenshot(172).png)
+
+- Sidemenu
+
+![](Screenshot(173).png)
