@@ -1,5 +1,7 @@
 # tokokita
 
+# Untuk README pertemuan 5 ada di file README2.md
+
 Tugas Pertemuan 4 Praktikum Pemrograman Mobile Shift C
 
 Nama : Daniel Abdillah Arif NIM : H1D022055
