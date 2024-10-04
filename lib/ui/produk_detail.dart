@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tokokita/bloc/produk_bloc.dart';
 import 'package:tokokita/model/produk.dart';
 import 'package:tokokita/ui/produk_form.dart';
+import 'package:tokokita/ui/produk_page.dart';
+import 'package:tokokita/widget/warning_dialog.dart';
 
+// ignore: must_be_immutable
 class ProdukDetail extends StatefulWidget {
-  final Produk? produk;
-
+  Produk? produk;
   ProdukDetail({Key? key, this.produk}) : super(key: key);
-
   @override
   _ProdukDetailState createState() => _ProdukDetailState();
 }
@@ -16,119 +18,85 @@ class _ProdukDetailState extends State<ProdukDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detail Produk Daniel'),
+        title: const Text('Detail Produk'),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            elevation: 5, // Efek bayangan agar card lebih menonjol
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(15), // Membuat sudut melengkung
+        child: Column(
+          children: [
+            Text(
+              "Kode : ${widget.produk!.kodeProduk}",
+              style: const TextStyle(fontSize: 20.0),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildDetailItem("Kode Produk", widget.produk!.kodeProduk!),
-                  const SizedBox(height: 8.0), // Spasi antara item
-                  _buildDetailItem("Nama Produk", widget.produk!.namaProduk!),
-                  const SizedBox(height: 8.0), // Spasi antara item
-                  _buildDetailItem(
-                      "Harga Produk", 'Rp. ${widget.produk!.hargaProduk}'),
-                  const SizedBox(
-                      height: 20.0), // Spasi antara detail dan tombol
-                  _tombolHapusEdit(),
-                ],
-              ),
+            Text(
+              "Nama : ${widget.produk!.namaProduk}",
+              style: const TextStyle(fontSize: 18.0),
             ),
-          ),
+            Text(
+              "Harga : Rp. ${widget.produk!.hargaProduk.toString()}",
+              style: const TextStyle(fontSize: 18.0),
+            ),
+            _tombolHapusEdit()
+          ],
         ),
       ),
     );
   }
 
-  // Membuat widget untuk menampilkan detail produk dalam card
-  Widget _buildDetailItem(String title, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "$title: ",
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-        ),
-        Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 16.0),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Membuat tombol Edit dan Hapus
   Widget _tombolHapusEdit() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // Tombol Edit
+// Tombol Edit
         OutlinedButton(
-          child: const Text("Edit"),
+          child: const Text("EDIT"),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProdukForm(produk: widget.produk!),
+                builder: (context) => ProdukForm(
+                  produk: widget.produk!,
+                ),
               ),
-            ).then((value) {
-              if (value == true) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Produk berhasil diperbarui!')),
-                );
-              }
-            });
+            );
           },
         ),
-        const SizedBox(width: 8.0), // Jarak antar tombol
-        // Tombol Hapus
+// Tombol Hapus
         OutlinedButton(
-          child: const Text("Delete"),
+          child: const Text("DELETE"),
           onPressed: () => confirmHapus(),
         ),
       ],
     );
   }
 
-  // Dialog konfirmasi untuk menghapus produk
   void confirmHapus() {
     AlertDialog alertDialog = AlertDialog(
-      title: const Text("Konfirmasi"),
-      content: const Text("Yakin ingin menghapus produk ini?"),
+      content: const Text("Yakin ingin menghapus data ini?"),
       actions: [
-        // Tombol hapus
-        TextButton(
+//tombol hapus
+        OutlinedButton(
           child: const Text("Ya"),
           onPressed: () {
-            // Logika penghapusan produk
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Produk berhasil dihapus!')),
-            );
-            Navigator.pop(context); // Menutup dialog
-            Navigator.pop(context); // Kembali ke halaman sebelumnya
+            ProdukBloc.deleteProduk(id: int.parse(widget.produk!.id!)).then(
+                (value) => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const ProdukPage()))
+                    }, onError: (error) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => const WarningDialog(
+                        description: "Hapus gagal, silahkan coba lagi",
+                      ));
+            });
           },
         ),
-        // Tombol batal
-        TextButton(
+//tombol batal
+        OutlinedButton(
           child: const Text("Batal"),
           onPressed: () => Navigator.pop(context),
-        ),
+        )
       ],
     );
-
     showDialog(builder: (context) => alertDialog, context: context);
   }
 }
