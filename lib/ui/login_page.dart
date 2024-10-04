@@ -7,6 +7,7 @@ import 'package:tokokita/widget/warning_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -16,27 +17,42 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   final _emailTextboxController = TextEditingController();
   final _passwordTextboxController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Login Daniel'),
+        backgroundColor: Colors.blue[700],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                _emailTextField(),
-                _passwordTextField(),
-                _buttonLogin(),
-                const SizedBox(
-                  height: 30,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              elevation: 8,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _emailTextField(),
+                      const SizedBox(height: 20),
+                      _passwordTextField(),
+                      const SizedBox(height: 30),
+                      _buttonLogin(),
+                      const SizedBox(height: 30),
+                      _menuRegistrasi(),
+                    ],
+                  ),
                 ),
-                _menuRegistrasi()
-              ],
+              ),
             ),
           ),
         ),
@@ -44,14 +60,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-//Membuat Textbox email
+  // Membuat Textbox email
   Widget _emailTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "Email"),
+      decoration: InputDecoration(
+        labelText: "Email",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        prefixIcon: Icon(Icons.email, color: Colors.blue[700]),
+      ),
       keyboardType: TextInputType.emailAddress,
       controller: _emailTextboxController,
       validator: (value) {
-//validasi harus diisi
         if (value!.isEmpty) {
           return 'Email harus diisi';
         }
@@ -60,15 +81,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-//Membuat Textbox password
+  // Membuat Textbox password
   Widget _passwordTextField() {
     return TextFormField(
-      decoration: const InputDecoration(labelText: "Password"),
-      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        labelText: "Password",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        prefixIcon: Icon(Icons.lock, color: Colors.blue[700]),
+      ),
       obscureText: true,
       controller: _passwordTextboxController,
       validator: (value) {
-//jika karakter yang dimasukkan kurang dari 6 karakter
         if (value!.isEmpty) {
           return "Password harus diisi";
         }
@@ -77,17 +102,34 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-//Membuat Tombol Login
-//Membuat Tombol Login
+  // Membuat Tombol Login
   Widget _buttonLogin() {
-    return ElevatedButton(
-        child: const Text("Login"),
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue[700],
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: _isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : const Text(
+                "Login",
+                style: TextStyle(fontSize: 18),
+              ),
         onPressed: () {
           var validate = _formKey.currentState!.validate();
           if (validate) {
             if (!_isLoading) _submit();
           }
-        });
+        },
+      ),
+    );
   }
 
   void _submit() {
@@ -126,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-// Membuat menu untuk membuka halaman registrasi
+  // Membuat menu untuk membuka halaman registrasi
   Widget _menuRegistrasi() {
     return Center(
       child: InkWell(
